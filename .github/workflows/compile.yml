@@ -22,7 +22,7 @@ jobs:
           device-os-version: "${{ matrix.device-os-version }}"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tracker-artifacts-${{ matrix.device-os-version }}
           path: |
