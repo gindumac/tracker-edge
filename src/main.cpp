@@ -51,6 +51,7 @@ void loop()
     Tracker::instance().loop();
 }
 
+// add speed to the location data
 void myLocationGenerationCallback(JSONWriter &writer, LocationPoint &point, const void *context)
 {
     writer.name("speed").value(point.speed, 2);
