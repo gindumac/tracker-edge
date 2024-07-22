@@ -27,22 +27,31 @@ PRODUCT_ID(TRACKER_PRODUCT_ID);
 PRODUCT_VERSION(TRACKER_PRODUCT_VERSION);
 
 STARTUP(
-    Tracker::startup();
-);
+    Tracker::startup(););
 
 SerialLogHandler logHandler(115200, LOG_LEVEL_TRACE, {
-    { "app.gps.nmea", LOG_LEVEL_INFO },
-    { "app.gps.ubx",  LOG_LEVEL_INFO },
-    { "ncp.at", LOG_LEVEL_INFO },
-    { "net.ppp.client", LOG_LEVEL_INFO },
-});
+                                                         {"app.gps.nmea", LOG_LEVEL_INFO},
+                                                         {"app.gps.ubx", LOG_LEVEL_INFO},
+                                                         {"ncp.at", LOG_LEVEL_INFO},
+                                                         {"net.ppp.client", LOG_LEVEL_INFO},
+                                                     });
+
+void myLocationGenerationCallback(JSONWriter &writer, LocationPoint &point, const void *context); // Forward declaration
 
 void setup()
 {
     Tracker::instance().init();
+    Tracker::instance().location.regLocGenCallback(myLocationGenerationCallback);
+
+    Particle.connect();
 }
 
 void loop()
 {
     Tracker::instance().loop();
+}
+
+void myLocationGenerationCallback(JSONWriter &writer, LocationPoint &point, const void *context)
+{
+    writer.name("speed").value(point.speed, 2);
 }
